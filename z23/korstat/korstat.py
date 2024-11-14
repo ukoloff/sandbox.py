@@ -14,6 +14,7 @@ if not os.path.isfile(src):
 
 data = DBF(src, encoding="cp866")
 frame = pandas.DataFrame(iter(data))
+frame = frame.convert_dtypes()
 
 prev = 0
 
