@@ -3,13 +3,15 @@
 #
 import os
 from dbfread import DBF
-from pandas import DataFrame
+import pandas
+# import DataFrame
 
-src = os.path.join(__file__, '../data/KORSTAT_5.DBF')
+src = os.path.join(__file__, "../data/KORSTAT_5.DBF")
 
-data = DBF(src, encoding='cp866')
-frame = DataFrame(iter(data))
-# print(frame)
+data = DBF(src, encoding="cp866")
+frame = pandas.DataFrame(iter(data))
 
-dst = os.path.join(__file__, '../../../tmp/stat.xlsx')
-frame.to_excel(dst)
+dst = os.path.join(__file__, "../../../tmp/stat.xlsx")
+if os.path.isfile(dst):
+    load = pandas.read_excel(dst)
+frame.to_excel(dst, freeze_panes=(1, 0))
