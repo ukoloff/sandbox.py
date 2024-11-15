@@ -24,6 +24,7 @@ first = True
 for row in data:
     if first:
         ws.append(list(row.keys()))
+        ws.freeze_panes = 'A2'
         first = False
     ws.append(list(row.values()))
 
