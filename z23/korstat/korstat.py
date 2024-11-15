@@ -21,13 +21,13 @@ def json_serial(obj):
     """JSON serializer for objects not serializable by default json code"""
 
     if isinstance(obj, (datetime, date)):
-        return obj.isoformat()
+        return datetime(*obj.timetuple()[:6]).isoformat()
     raise TypeError("Type %s not serializable" % type(obj))
 
 
 def hash(data):
     return hashlib.sha256(
-        json.dumps(data, ensure_ascii=False, default=json_serial)
+        json.dumps(data, ensure_ascii=False, default=json_serial).encode("utf8")
     ).hexdigest()
 
 
@@ -39,6 +39,9 @@ wbo = openpyxl.Workbook(write_only=True)
 wso = wbo.create_sheet()
 wso.title = "korStat"
 wso.freeze_panes = "A2"
+
+headerHash = None
+rowHashes = set()
 
 
 def add(data, header=False):
@@ -55,22 +58,36 @@ def add(data, header=False):
         row.append(cell)
     wso.append(row)
 
-first = True
+
 if os.path.isfile(dst):
-  wbi = openpyxl.load_workbook(dst, read_only=True, data_only=True)
-  wsi = wbi.active
-  for row in wsi:
-      data = [cell.value for cell in row]
-      add(data, first)
-      first = False
-  wbi.close()
+    wbi = openpyxl.load_workbook(dst, read_only=True, data_only=True)
+    wsi = wbi.active
+    for row in wsi:
+        data = [cell.value for cell in row]
+        add(data, not headerHash)
+        h = hash(data)
+        if not headerHash:
+            headerHash = h
+        else:
+            rowHashes.add(h)
+    wbi.close()
 
 data = DBF(src, encoding="cp866")
+first = True
 for row in data:
     if first:
-        add(list(row.keys()), first)
         first = False
+        hdr = list(row.keys())
+        if headerHash:
+            if headerHash and hash(hdr) != headerHash:
+                print("Несоответствие списка полей:", *hdr)
+        else:
+            add(hdr, True)
     row = list(row.values())
+    h = hash(row)
+    if h in rowHashes:
+        continue
+    rowHashes.add(h)
     add(row)
 
 wbo.save(dst)
