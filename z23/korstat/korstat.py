@@ -2,6 +2,7 @@
 # Перенос записей из C:\Paket\Baza\KorStat.dbf в \\kzkserv\Data\Baza_23\stat\stat.XLSX
 #
 import os
+import json
 import openpyxl
 from dbfread import DBF
 import openpyxl.styles
@@ -40,4 +41,4 @@ wb.save(dst)
 wb = openpyxl.load_workbook(dst, read_only=True, data_only=True)
 ws = wb.active
 for row in ws:
-    print(*(cell.value for cell in row))
+    print(json.dumps([cell.value for cell in row], ensure_ascii=False, default=str))
