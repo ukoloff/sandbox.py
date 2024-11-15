@@ -29,22 +29,22 @@ if not os.path.isfile(src):
 
 data = DBF(src, encoding="cp866")
 
-wb = openpyxl.Workbook()
-ws = wb.active
+wb = openpyxl.Workbook(write_only=True)
+ws = wb.create_sheet()
 ws.title = "korStat"
+ws.freeze_panes = "A2"
 
 first = True
 
 for row in data:
-    if first:
-        ws.append(list(row.keys()))
-        font = openpyxl.styles.Font(bold=True)
-        align = openpyxl.styles.Alignment(horizontal="center")
-        for cell in ws[1]:
-            cell.font = font
-            cell.alignment = align
-        ws.freeze_panes = "A2"
-        first = False
+    # if first:
+    #     ws.append(list(row.keys()))
+    #     font = openpyxl.styles.Font(bold=True)
+    #     align = openpyxl.styles.Alignment(horizontal="center")
+    #     for cell in ws[1]:
+    #         cell.font = font
+    #         cell.alignment = align
+    #     first = False
     ws.append(list(row.values()))
 
 wb.save(dst)
