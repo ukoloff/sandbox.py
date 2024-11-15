@@ -6,6 +6,7 @@ import json
 from datetime import date, datetime
 import openpyxl
 from dbfread import DBF
+import openpyxl.cell
 import openpyxl.styles
 
 src = r"C:\Paket\Baza\KorStat.dbf"
@@ -37,14 +38,17 @@ ws.freeze_panes = "A2"
 first = True
 
 for row in data:
-    # if first:
-    #     ws.append(list(row.keys()))
-    #     font = openpyxl.styles.Font(bold=True)
-    #     align = openpyxl.styles.Alignment(horizontal="center")
-    #     for cell in ws[1]:
-    #         cell.font = font
-    #         cell.alignment = align
-    #     first = False
+    if first:
+        header = []
+        font = openpyxl.styles.Font(bold=True)
+        align = openpyxl.styles.Alignment(horizontal="center")
+        for name in row.keys():
+          cell = openpyxl.cell.WriteOnlyCell(ws, value=name)
+          cell.font = font
+          cell.alignment = align
+          header.append(cell)
+        ws.append(header)
+        first = False
     ws.append(list(row.values()))
 
 wb.save(dst)
