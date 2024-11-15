@@ -13,7 +13,7 @@ import openpyxl.styles
 src = r"C:\Paket\Baza\KorStat.dbf"
 dst = r"\\kzkserv\Data\Baza_23\stat\stat.xlsx"
 
-dst = os.path.join(__file__, "../../../tmp/stat.xlsx")
+# dst = os.path.join(__file__, "../../../tmp/stat.xlsx")
 
 
 # https://stackoverflow.com/a/22238613/6127481
@@ -38,7 +38,9 @@ def f2i(x):
 
 def hash(data):
     return hashlib.sha256(
-        json.dumps([f2i(it) for it in data], ensure_ascii=False, default=json_serial).encode("utf8")
+        json.dumps(
+            [f2i(it) for it in data], ensure_ascii=False, default=json_serial
+        ).encode("utf8")
     ).hexdigest()
 
 
