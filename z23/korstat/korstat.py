@@ -19,6 +19,7 @@ data = DBF(src, encoding="cp866")
 
 wb = openpyxl.Workbook()
 ws = wb.active
+ws.title = 'korStat'
 
 first = True
 
@@ -35,3 +36,6 @@ for row in data:
     ws.append(list(row.values()))
 
 wb.save(dst)
+
+wb = openpyxl.load_workbook(dst)
+print(wb)
