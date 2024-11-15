@@ -28,32 +28,32 @@ if not os.path.isfile(src):
     print("File not found: ", src)
     exit()
 
+wbo = openpyxl.Workbook(write_only=True)
+wso = wbo.create_sheet()
+wso.title = "korStat"
+wso.freeze_panes = "A2"
+
+wbi = openpyxl.load_workbook(dst, read_only=True, data_only=True)
+wsi = wbi.active
+for row in wsi:
+    wso.append([openpyxl.cell.WriteOnlyCell(wso, value=cell.value) for cell in row])
+    # print(json.dumps([cell.value for cell in row], ensure_ascii=False, default=json_serial))
+wbi.close()
+
 data = DBF(src, encoding="cp866")
-
-wb = openpyxl.Workbook(write_only=True)
-ws = wb.create_sheet()
-ws.title = "korStat"
-ws.freeze_panes = "A2"
-
 first = True
-
 for row in data:
     if first:
         header = []
         font = openpyxl.styles.Font(bold=True)
         align = openpyxl.styles.Alignment(horizontal="center")
         for name in row.keys():
-          cell = openpyxl.cell.WriteOnlyCell(ws, value=name)
-          cell.font = font
-          cell.alignment = align
-          header.append(cell)
-        ws.append(header)
+            cell = openpyxl.cell.WriteOnlyCell(wso, value=name)
+            cell.font = font
+            cell.alignment = align
+            header.append(cell)
+        wso.append(header)
         first = False
-    ws.append(list(row.values()))
+    wso.append(list(row.values()))
 
-wb.save(dst)
-
-wb = openpyxl.load_workbook(dst, read_only=True, data_only=True)
-ws = wb.active
-for row in ws:
-    print(json.dumps([cell.value for cell in row], ensure_ascii=False, default=json_serial))
+wbo.save(dst)
