@@ -25,9 +25,20 @@ def json_serial(obj):
     raise TypeError("Type %s not serializable" % type(obj))
 
 
+def f2i(x):
+    """
+    Convert float to int if it is int
+
+    Excel tends to do so
+    """
+    if isinstance(x, float) and int(x) == x:
+        return int(x)
+    return x
+
+
 def hash(data):
     return hashlib.sha256(
-        json.dumps(data, ensure_ascii=False, default=json_serial).encode("utf8")
+        json.dumps([f2i(it) for it in data], ensure_ascii=False, default=json_serial).encode("utf8")
     ).hexdigest()
 
 
