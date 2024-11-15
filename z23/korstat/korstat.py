@@ -36,6 +36,7 @@ if not os.path.isfile(src):
     exit()
 
 wbo = openpyxl.Workbook(write_only=True)
+wbo.iso_dates = True
 wso = wbo.create_sheet()
 wso.title = "korStat"
 wso.freeze_panes = "A2"
