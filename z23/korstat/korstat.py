@@ -19,7 +19,12 @@ data = DBF(src, encoding="cp866")
 wb = openpyxl.Workbook()
 ws = wb.active
 
+first = True
+
 for row in data:
+    if first:
+        ws.append(list(row.keys()))
+        first = False
     ws.append(list(row.values()))
 
 wb.save(dst)
