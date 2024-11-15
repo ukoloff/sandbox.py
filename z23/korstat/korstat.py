@@ -37,5 +37,7 @@ for row in data:
 
 wb.save(dst)
 
-wb = openpyxl.load_workbook(dst)
-print(wb)
+wb = openpyxl.load_workbook(dst, read_only=True, data_only=True)
+ws = wb.active
+for row in ws:
+    print(*(cell.value for cell in row))
