@@ -2,6 +2,7 @@
 # Перенос записей из C:\Paket\Baza\KorStat.dbf в \\kzkserv\Data\Baza_23\stat\stat.XLSX
 #
 import os
+import glob
 import json
 import hashlib
 from datetime import date, datetime
@@ -48,6 +49,8 @@ def hash(data):
 if not os.path.isfile(src):
     print("File not found: ", src)
     exit()
+
+sources = [src] + glob.glob(os.path.join(os.path.dirname(dst), '*.dbf'))
 
 wbo = openpyxl.Workbook(write_only=True)
 wbo.iso_dates = True
