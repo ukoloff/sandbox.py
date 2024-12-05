@@ -13,8 +13,8 @@ import openpyxl.cell
 import openpyxl.styles
 
 src = r"C:\Paket\Baza\KorStat.dbf"
-# dst = r"\\kzkserv\Data\Baza_23\stat\stat.xlsx"
-dst = r"C:\Paket\stat\DBFs\stat.xlsx"
+# dst = r"C:\Paket\stat\DBFs\stat.xlsx"
+dst = r"\\kzkserv\Data\Baza_23\stat\DBFs\stat.xlsx"
 
 # dst = os.path.join(__file__, "../../../tmp/stat.xlsx")
 
