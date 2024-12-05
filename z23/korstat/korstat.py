@@ -2,6 +2,8 @@
 # Перенос записей из C:\Paket\Baza\KorStat.dbf в \\kzkserv\Data\Baza_23\stat\stat.XLSX
 #
 import os
+import glob
+import shutil
 import json
 import hashlib
 from datetime import date, datetime
@@ -11,7 +13,8 @@ import openpyxl.cell
 import openpyxl.styles
 
 src = r"C:\Paket\Baza\KorStat.dbf"
-dst = r"\\kzkserv\Data\Baza_23\stat\stat.xlsx"
+# dst = r"C:\Paket\stat\DBFs\stat.xlsx"
+dst = r"\\kzkserv\Data\Baza_23\stat\DBFs\stat.xlsx"
 
 # dst = os.path.join(__file__, "../../../tmp/stat.xlsx")
 
@@ -47,6 +50,8 @@ def hash(data):
 if not os.path.isfile(src):
     print("File not found: ", src)
     exit()
+
+sources = [src] + glob.glob(os.path.join(os.path.dirname(dst), "*.dbf"))
 
 wbo = openpyxl.Workbook(write_only=True)
 wbo.iso_dates = True
@@ -86,22 +91,29 @@ if os.path.isfile(dst):
             rowHashes.add(h)
     wbi.close()
 
-data = DBF(src, encoding="cp866")
-first = True
-for row in data:
-    if first:
-        first = False
-        hdr = list(row.keys())
-        if headerHash:
-            if headerHash and hash(hdr) != headerHash:
-                print("Несоответствие списка полей:", *hdr)
-        else:
-            add(hdr, True)
-    row = list(row.values())
-    h = hash(row)
-    if h in rowHashes:
-        continue
-    rowHashes.add(h)
-    add(row)
+for infile in sources:
+    data = DBF(infile, encoding="cp866")
+    first = True
+    for row in data:
+        if first:
+            first = False
+            hdr = list(row.keys())
+            if headerHash:
+                if headerHash and hash(hdr) != headerHash:
+                    print("Несоответствие списка полей:", *hdr)
+            else:
+                add(hdr, True)
+                headerHash = hash(hdr)
+        row = list(row.values())
+        h = hash(row)
+        if h in rowHashes:
+            continue
+        rowHashes.add(h)
+        add(row)
 
 wbo.save(dst)
+
+try:
+    shutil.copy2(dst, os.path.dirname(os.path.dirname(dst)))
+except:  # noqa: E722
+    print("Cannot copy:", dst)
