@@ -26,10 +26,18 @@ with webdriver.Chrome(options=opts) as browser:
 
   vlan = browser.find_element(By.NAME, 'VlanWanSwitch')
   Select(vlan).select_by_index(0)
+  vlan = browser.find_element(By.NAME, 'VlanPcSwitch')
+  Select(vlan).select_by_index(0)
+  vlan = browser.find_element(By.NAME, 'VlanDhcpSwitch')
+  Select(vlan).select_by_index(1)
+  dhcp = browser.find_element(By.NAME, 'VlanDhcpOption')
+  dhcp.clear()
+  dhcp.send_keys('132')
+
   post = browser.find_element(By.ID, 'btn_confirm1')
   post.click()
 
-  post = browser.find_element(By.ID, 'btn-apply-cache-config')
-  post.click()
+  apply = browser.find_element(By.ID, 'btn-apply-cache-config')
+  apply.click()
 
   time.sleep(5)
