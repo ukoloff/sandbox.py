@@ -29,4 +29,7 @@ with webdriver.Chrome(options=opts) as browser:
   post = browser.find_element(By.ID, 'btn_confirm1')
   post.click()
 
+  post = browser.find_element(By.ID, 'btn-apply-cache-config')
+  post.click()
+
   time.sleep(5)
