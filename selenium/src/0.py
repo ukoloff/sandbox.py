@@ -1,8 +1,8 @@
 from selenium import webdriver
 import time
 
-browser = webdriver.Chrome()
-browser.get("https://nc.ekb.ru")
 
-time.sleep(5)
-browser.quit()
+with webdriver.Chrome() as browser:
+  browser.get("https://nc.ekb.ru")
+
+  time.sleep(5)
