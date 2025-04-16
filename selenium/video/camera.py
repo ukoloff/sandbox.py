@@ -111,12 +111,12 @@ def camera(browser, ip):
         log("Отключение")
 
 
-with webdriver.Firefox(options=options) as browser:
-    browser.maximize_window()
-    browser.set_page_load_timeout(5)
-    browser.implicitly_wait(5)
+for n in range(20, 255):
+    with webdriver.Firefox(options=options) as browser:
+        browser.maximize_window()
+        browser.set_page_load_timeout(5)
+        browser.implicitly_wait(5)
 
-    for n in range(20, 255):
-      camera(browser, f"192.168.0.{n}")
+        camera(browser, f"192.168.0.{n}")
 
-    print("That's all folks!")
+print("That's all folks!")
