@@ -103,7 +103,7 @@ def camera(browser, ip):
     except Exception as e:
         tb = traceback.extract_tb(e.__traceback__)
         pos = [z for z in tb if z.filename == __file__][-1]
-        log(f"ERROR: Ошибка в строке {pos.lineno}: {pos._lines.strip()}")
+        log(f"ERROR: Ошибка в строке {pos.lineno}: {pos._lines.strip()}: ${e.msg}")
     finally:
         log("Отключение")
 
@@ -113,6 +113,7 @@ with webdriver.Firefox(options=options) as browser:
     browser.set_page_load_timeout(5)
     browser.implicitly_wait(5)
 
-    camera(browser, "192.168.0.23")
+    for n in range(20, 255):
+      camera(browser, f"192.168.0.{n}")
 
     print("That's all folks!")
