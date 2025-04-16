@@ -23,6 +23,8 @@ with webdriver.Firefox(options=options) as browser:
     p = browser.find_element(By.ID, "login_psw")
     p.clear()
     p.send_keys(env['PASS'])
+    b = browser.find_element(By.LINK_TEXT, 'Вход')
+    b.click()
 
 
     print(browser)
