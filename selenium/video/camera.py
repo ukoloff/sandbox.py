@@ -56,9 +56,12 @@ def camera(browser, ip):
         m = browser.find_element(By.CSS_SELECTOR, "span[title=Настройки]")
         time.sleep(1)
         m.click()
+        # browser.execute_script("arguments[0].click();", m)
+
         m = browser.find_element(By.CSS_SELECTOR, "span[title=Видео]")
         time.sleep(1)
         m.click()
+        # browser.execute_script("arguments[0].click();", m)
 
         log("Меняю настройки")
 
@@ -106,6 +109,7 @@ def camera(browser, ip):
 
 
 with webdriver.Firefox(options=options) as browser:
+    browser.maximize_window()
     browser.set_page_load_timeout(5)
     browser.implicitly_wait(5)
 
