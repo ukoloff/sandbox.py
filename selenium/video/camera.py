@@ -50,7 +50,7 @@ def camera(browser, ip):
         p.send_keys(env["PASS"])
         b = browser.find_element(By.LINK_TEXT, "Вход")
         b.click()
-        time.sleep(1)
+        time.sleep(5)
 
         log("Открываю Настройки")
 
