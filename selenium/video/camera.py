@@ -29,10 +29,10 @@ with webdriver.Firefox(options=options) as browser:
     b.click()
 
     m = browser.find_element(By.CSS_SELECTOR, 'span[title=Настройки]')
-    time.sleep(0.3)
+    time.sleep(0.5)
     m.click()
     m = browser.find_element(By.CSS_SELECTOR, 'span[title=Видео]')
-    time.sleep(0.3)
+    time.sleep(0.5)
     m.click()
 
     s = browser.find_element(By.ID, "video_compression0")
@@ -45,7 +45,17 @@ with webdriver.Firefox(options=options) as browser:
 
     i = browser.find_element(By.ID, "video_gop0")
     i.clear()
-    i.send_keys('12')
+    # i.send_keys('12')
 
+    s = browser.find_element(By.ID, "video_compression1")
+    s = Select(s)
+    s.select_by_visible_text('H.264')
+
+    i = browser.find_element(By.ID, "video_gop1")
+    i.clear()
+    # i.send_keys('12')
+
+    b = browser.find_element(By.LINK_TEXT, 'Сохранить')
+    b.click()
 
     print(browser)
