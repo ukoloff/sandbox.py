@@ -58,4 +58,6 @@ with webdriver.Firefox(options=options) as browser:
     b = browser.find_element(By.LINK_TEXT, 'Сохранить')
     b.click()
 
+    bs = browser.find_elements(By.LINK_TEXT, 'OK')
+
     print(browser)
