@@ -26,5 +26,10 @@ with webdriver.Firefox(options=options) as browser:
     b = browser.find_element(By.LINK_TEXT, 'Вход')
     b.click()
 
+    m = browser.find_element(By.CSS_SELECTOR, 'span[title=Настройки]')
+    m.click()
+    m = browser.find_element(By.CSS_SELECTOR, 'span[title=Видео]')
+    m.click()
+
 
     print(browser)
