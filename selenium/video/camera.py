@@ -39,6 +39,13 @@ with webdriver.Firefox(options=options) as browser:
     s = Select(s)
     s.select_by_visible_text('H.264')
 
+    s = browser.find_element(By.ID, "video_sencode0")
+    s = Select(s)
+    s.select_by_visible_text('Выкл.')
+
+    i = browser.find_element(By.ID, "video_gop0")
+    i.clear()
+    i.send_keys('12')
 
 
     print(browser)
