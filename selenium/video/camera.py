@@ -36,7 +36,11 @@ def camera(browser, ip):
 
     s = browser.find_element(By.ID, "video_compression0")
     s = Select(s)
-    s.select_by_visible_text('H.264')
+    h264 = 'H.264'
+    if not len([1 for o in s.options if o.text == h264]):
+       print(f"Вариант {h264} недоступен")
+       return
+    s.select_by_visible_text(h264)
 
     s = browser.find_element(By.ID, "video_sencode0")
     s = Select(s)
