@@ -50,16 +50,17 @@ def camera(browser, ip):
         p.send_keys(env["PASS"])
         b = browser.find_element(By.LINK_TEXT, "Вход")
         b.click()
+        time.sleep(1)
 
         log("Открываю Настройки")
 
         m = browser.find_element(By.CSS_SELECTOR, "span[title=Настройки]")
-        time.sleep(1)
+        # time.sleep(1)
         m.click()
         # browser.execute_script("arguments[0].click();", m)
 
         m = browser.find_element(By.CSS_SELECTOR, "span[title=Видео]")
-        time.sleep(1)
+        # time.sleep(1)
         m.click()
         # browser.execute_script("arguments[0].click();", m)
 
