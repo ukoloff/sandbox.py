@@ -16,7 +16,11 @@ options.set_preference("network.proxy.socks_port", 1080)
 options.set_preference("network.proxy.socks_remote_dns", True)
 
 def camera(browser, ip):
-    browser.get(f"http://{ip}")
+    try:
+      browser.get(f"http://{ip}")
+    except Exception:
+       print("Ошибка соединения")
+       return
 
     u = browser.find_elements(By.ID, "login_user")
     if not len(u):
@@ -70,10 +74,11 @@ def camera(browser, ip):
         bs[0].click()
 
 with webdriver.Firefox(options=options) as browser:
+    browser.set_page_load_timeout(5)
     browser.implicitly_wait(5)
 
     try:
-      camera(browser, "192.168.0.19")
+      camera(browser, "192.168.0.253")
     except Exception as e:
       pos = [z for z in traceback.extract_tb(e.__traceback__) if z.filename == __file__][-1]
       print(f"Ошибка в строке {pos.lineno}: {pos._lines.strip()}")
