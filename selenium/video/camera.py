@@ -17,12 +17,15 @@ options.set_preference("network.proxy.socks_remote_dns", True)
 
 
 def camera(browser, ip):
+    print(f"Connecting to {ip}")
     try:
         try:
             browser.get(f"http://{ip}")
         except Exception:
             print("Ошибка соединения")
             return
+
+        print("Connected")
 
         u = browser.find_elements(By.ID, "login_user")
         if not len(u):
@@ -37,12 +40,16 @@ def camera(browser, ip):
         b = browser.find_element(By.LINK_TEXT, "Вход")
         b.click()
 
+        print("Открываю Настройки")
+
         m = browser.find_element(By.CSS_SELECTOR, "span[title=Настройки]")
-        time.sleep(0.5)
+        time.sleep(1)
         m.click()
         m = browser.find_element(By.CSS_SELECTOR, "span[title=Видео]")
-        time.sleep(0.5)
+        time.sleep(1)
         m.click()
+
+        print("Меняю настройки")
 
         s = browser.find_element(By.ID, "video_compression0")
         s = Select(s)
@@ -68,6 +75,8 @@ def camera(browser, ip):
         i.clear()
         # i.send_keys('12')
 
+        print("Сохраняю изменения")
+
         b = browser.find_element(By.LINK_TEXT, "Сохранить")
         b.click()
 
@@ -75,18 +84,20 @@ def camera(browser, ip):
         if len(bs):
             print("Proceed to reboot")
             bs[0].click()
-            time.sleep(0.5)
+            time.sleep(1)
 
     except Exception as e:
         tb = traceback.extract_tb(e.__traceback__)
         pos = [z for z in tb if z.filename == __file__][-1]
         print(f"Ошибка в строке {pos.lineno}: {pos._lines.strip()}")
+    finally:
+        print(f"Done with {ip}")
 
 
 with webdriver.Firefox(options=options) as browser:
     browser.set_page_load_timeout(5)
     browser.implicitly_wait(5)
 
-    camera(browser, "192.168.0.23")
+    camera(browser, "192.168.0.20")
 
     print("That's all folks!")
