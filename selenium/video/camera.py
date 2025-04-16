@@ -17,7 +17,7 @@ options.set_preference("network.proxy.socks_remote_dns", True)
 with webdriver.Firefox(options=options) as browser:
     browser.implicitly_wait(5)
 
-    browser.get("http://192.168.0.22")
+    browser.get("http://192.168.0.23")
 
     u = browser.find_element(By.ID, "login_user")
     u.clear()
