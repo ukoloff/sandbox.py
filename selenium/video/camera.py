@@ -1,4 +1,5 @@
 import os
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
@@ -27,8 +28,10 @@ with webdriver.Firefox(options=options) as browser:
     b.click()
 
     m = browser.find_element(By.CSS_SELECTOR, 'span[title=Настройки]')
+    time.sleep(0.3)
     m.click()
     m = browser.find_element(By.CSS_SELECTOR, 'span[title=Видео]')
+    time.sleep(0.3)
     m.click()
 
 
