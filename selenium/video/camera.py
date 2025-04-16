@@ -58,11 +58,13 @@ def camera(browser, ip):
         # time.sleep(1)
         m.click()
         # browser.execute_script("arguments[0].click();", m)
+        time.sleep(1)
 
         m = browser.find_element(By.CSS_SELECTOR, "span[title=Видео]")
         # time.sleep(1)
         m.click()
         # browser.execute_script("arguments[0].click();", m)
+        time.sleep(1)
 
         log("Меняю настройки")
 
