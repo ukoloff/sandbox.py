@@ -18,7 +18,11 @@ options.set_preference("network.proxy.socks_remote_dns", True)
 def camera(browser, ip):
     browser.get(f"http://{ip}")
 
-    u = browser.find_element(By.ID, "login_user")
+    u = browser.find_elements(By.ID, "login_user")
+    if not len(u):
+       print("Неподдерживаемая форма авторизации")
+       return
+    u = u[0]
     u.clear()
     u.send_keys(env['USER'])
     p = browser.find_element(By.ID, "login_psw")
@@ -69,7 +73,7 @@ with webdriver.Firefox(options=options) as browser:
     browser.implicitly_wait(5)
 
     try:
-      camera(browser, "192.168.0.21")
+      camera(browser, "192.168.0.19")
     except Exception as e:
       pos = [z for z in traceback.extract_tb(e.__traceback__) if z.filename == __file__][-1]
       print(f"Ошибка в строке {pos.lineno}: {pos._lines.strip()}")
