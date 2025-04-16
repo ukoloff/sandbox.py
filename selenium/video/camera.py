@@ -1,5 +1,6 @@
 import os
 import time
+import traceback
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
@@ -63,6 +64,10 @@ def camera(browser, ip):
 with webdriver.Firefox(options=options) as browser:
     browser.implicitly_wait(5)
 
-    camera(browser, "192.168.0.21")
+    try:
+      camera(browser, "192.168.0.21")
+    except Exception as e:
+      pos = [z for z in traceback.extract_tb(e.__traceback__) if z.filename == __file__][-1]
+      print(f"Ошибка в строке {pos.lineno}: {pos._lines.strip()}")
 
     print("That's all folks!")
