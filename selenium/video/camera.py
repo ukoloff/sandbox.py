@@ -14,10 +14,8 @@ options.set_preference("network.proxy.socks", "localhost")
 options.set_preference("network.proxy.socks_port", 1080)
 options.set_preference("network.proxy.socks_remote_dns", True)
 
-with webdriver.Firefox(options=options) as browser:
-    browser.implicitly_wait(5)
-
-    browser.get("http://192.168.0.23")
+def camera(browser, ip):
+    browser.get(f"http://{ip}")
 
     u = browser.find_element(By.ID, "login_user")
     u.clear()
@@ -62,4 +60,9 @@ with webdriver.Firefox(options=options) as browser:
     if len(bs):
         bs[0].click()
 
-    print(browser)
+with webdriver.Firefox(options=options) as browser:
+    browser.implicitly_wait(5)
+
+    camera(browser, "192.168.0.21")
+
+    print("That's all folks!")
