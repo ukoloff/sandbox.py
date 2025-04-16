@@ -59,5 +59,7 @@ with webdriver.Firefox(options=options) as browser:
     b.click()
 
     bs = browser.find_elements(By.LINK_TEXT, 'OK')
+    if len(bs):
+        bs[0].click()
 
     print(browser)
