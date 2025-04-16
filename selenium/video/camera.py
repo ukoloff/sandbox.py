@@ -2,6 +2,7 @@ import os
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
 
 env = dict(
     line.strip().split("=", 2) for line in open(os.path.join(__file__, "../.env"))
@@ -33,6 +34,11 @@ with webdriver.Firefox(options=options) as browser:
     m = browser.find_element(By.CSS_SELECTOR, 'span[title=Видео]')
     time.sleep(0.3)
     m.click()
+
+    s = browser.find_element(By.ID, "video_compression0")
+    s = Select(s)
+    s.select_by_visible_text('H.264')
+
 
 
     print(browser)
