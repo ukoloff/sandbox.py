@@ -112,10 +112,11 @@ def camera(browser, ip):
 
 
 for n in range(20, 255):
+# for n in [233]:
     with webdriver.Firefox(options=options) as browser:
         browser.maximize_window()
-        browser.set_page_load_timeout(5)
-        browser.implicitly_wait(5)
+        browser.set_page_load_timeout(10)
+        browser.implicitly_wait(10)
 
         camera(browser, f"192.168.0.{n}")
 
