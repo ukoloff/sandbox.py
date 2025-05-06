@@ -15,4 +15,5 @@ with webdriver.Chrome() as browser:
     browser.back()
     btn = browser.find_element(By.TAG_NAME, 'button')
     btn.click()
-    a = 1
+    answer = browser.switch_to.alert.text
+    print(answer)
