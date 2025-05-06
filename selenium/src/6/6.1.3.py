@@ -11,4 +11,8 @@ with webdriver.Chrome() as browser:
     link.click()
     link = browser.find_element(By.TAG_NAME, 'a')
     link.click()
+    browser.back()
+    browser.back()
+    btn = browser.find_element(By.TAG_NAME, 'button')
+    btn.click()
     a = 1
