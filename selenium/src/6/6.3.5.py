@@ -13,7 +13,14 @@ with webdriver.Chrome(service=svc) as browser:
     browser.get("https://parsinger.ru/selenium/6/6.3/index.html")
 
     for cookie in browser.get_cookies():
-      if cookie['value'] == 'true':
-         song = cookie['name']
+        if cookie["value"] == "true":
+            song = cookie["name"]
 
-    print(song)
+    input = browser.find_element(By.ID, "phraseInput")
+    input.clear()
+    input.send_keys(song)
+
+    browser.find_element(By.TAG_NAME, "button").click()
+
+    out = browser.find_element(By.ID, "result")
+    print(out.text)
