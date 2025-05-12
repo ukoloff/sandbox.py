@@ -169,6 +169,7 @@ with webdriver.Chrome() as browser:
     browser.implicitly_wait(5)
     browser.get("https://parsinger.ru/selenium/5.6/1/index.html")
 
+    hackers = []
     for c in cookies:
         browser.delete_all_cookies()
         browser.add_cookie(c)
@@ -176,5 +177,8 @@ with webdriver.Chrome() as browser:
         sleep(0.1)
         age = browser.find_element(By.ID, 'age').text.split()[-1]
         count = len(browser.find_elements(By.CSS_SELECTOR, '#skills li'))
-        print(c['name'], age, count)
+        cs = browser.get_cookies()
+        hackers.append([int(age), -count, cs[0]['value']])
+    hackers.sort()
+    print(hackers[0][2])
 
