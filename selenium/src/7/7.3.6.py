@@ -1,5 +1,5 @@
 #
-# https://stepik.org/lesson/732067/step/3?unit=733600
+# https://stepik.org/lesson/732067/step/6?unit=733600
 #
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -11,11 +11,10 @@ svc = webdriver.ChromeService(
 
 with webdriver.Chrome(service=svc) as browser:
     browser.implicitly_wait(5)
-    browser.get("http://parsinger.ru/selenium/7/7.3.1/index.html")
+    browser.get("https://parsinger.ru/selenium/7/7.3.2/index.html")
 
-    src = browser.find_element(By.ID, "draggable")
-    dst = browser.find_element(By.ID, "target")
-    ActionChains(browser).drag_and_drop(src, dst).perform()
+    src = browser.find_element(By.ID, "dblclick-area")
+    ActionChains(browser).double_click(src).perform()
 
     ans = browser.find_element(By.ID, 'password').text
     print(ans)
