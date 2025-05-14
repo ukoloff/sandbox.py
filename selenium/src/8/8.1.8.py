@@ -14,7 +14,18 @@ with webdriver.Chrome() as browser:
         browser.switch_to.new_window('tab:' + url)
         browser.get(url)
 
-    ActionChains(browser).pause(3).perform()
+    ActionChains(browser).pause(7).perform()
 
-    ans = int(t1) + int(t2)
+    summa = 0
+    for h in browser.window_handles[1:]:
+        browser.switch_to.window(h)
+        summa += sum(int(z.text) for z in browser.find_elements(By.CLASS_NAME, 'number'))
+
+    browser.switch_to.window(browser.window_handles[0])
+    inp = browser.find_element(By.TAG_NAME, 'input')
+    inp.clear()
+    inp.send_keys(summa)
+    browser.find_element(By.TAG_NAME, 'button').click()
+    ActionChains(browser).pause(0.3).perform()
+    ans = browser.find_element(By.ID, 'passwordDisplay').text
     print(ans)
