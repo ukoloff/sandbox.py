@@ -1,5 +1,5 @@
 #
-# https://stepik.org/lesson/1121330/step/4?unit=1132818
+# https://stepik.org/lesson/1121330/step/5?unit=1132818
 #
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -12,11 +12,13 @@ svc = webdriver.ChromeService(
 
 with webdriver.Chrome(service=svc) as browser:
     browser.implicitly_wait(1)
-    browser.get("https://parsinger.ru/selenium/9/9.4.3/index.html")
+    browser.get("https://parsinger.ru/selenium/9/9.4.4/index.html")
 
-    browser.find_elements(By.CSS_SELECTOR, 'a.btn')[-1].click()
+    browser.find_element(By.CSS_SELECTOR, 'a').click()
 
-    WebDriverWait(browser, 10).until(EC.url_contains('key=secure'))
+    here = browser.current_url
+
+    WebDriverWait(browser, 10).until(EC.url_changes(here))
 
     ans = browser.find_element(By.ID, "password")
     print(ans.text)
