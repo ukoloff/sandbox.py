@@ -5,11 +5,7 @@ import re
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-svc = webdriver.ChromeService(
-    executable_path=r"C:\Users\s.ukolov\.cache\selenium\chromedriver\win64\135.0.7049.114\chromedriver.exe"
-)
-
-with webdriver.Chrome(service=svc) as browser:
+with webdriver.Chrome() as browser:
     browser.get("https://parsinger.ru/selenium/5.8/2/index.html")
 
     res = browser.find_element(By.ID, 'result')
