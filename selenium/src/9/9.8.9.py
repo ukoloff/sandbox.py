@@ -14,15 +14,20 @@ with webdriver.Chrome() as browser:
     cbs = browser.find_elements(By.CSS_SELECTOR, 'input[type=checkbox]')
     btns = browser.find_elements(By.TAG_NAME, 'button')
 
-    for cb, btn in zip(cbs, btns):
-        WebDriverWait(browser, 10).until(EC.element_to_be_selected(cb))
-        btn.click()
+    pairs = [[cb, btn] for cb, btn in zip(cbs, btns)]
 
-    # selector = (By.CSS_SELECTOR, 'input[type=checkbox]')
-    # n = len(browser.find_elements(*selector))
-    # found = 0
+    def tester(x):
+        n = 0
+        for pair in pairs:
+            if len(pair) < 2:
+                continue
+            n += 1
+            if not pair[0].get_attribute("checked"):
+                continue
+            pair[1].click()
+            pair.pop()
+        return not n
 
-    # while found < n:
-    #   cb = WebDriverWait(browser, 10).until(EC.element_located_to_be_selected(selector))
-    #   pass
+    x = WebDriverWait(browser, 10).until(tester)
+
     print(res.text)
