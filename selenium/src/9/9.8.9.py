@@ -4,7 +4,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 with webdriver.Chrome() as browser:
     browser.implicitly_wait(1)
@@ -21,8 +20,8 @@ with webdriver.Chrome() as browser:
         for pair in pairs:
             if len(pair) < 2:
                 continue
-            n += 1
             if not pair[0].get_attribute("checked"):
+                n += 1
                 continue
             pair[1].click()
             pair.pop()
