@@ -3,7 +3,7 @@
 #
 from typing import List
 from pathlib import Path
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from chromadb.utils import embedding_functions
 
 # https://docs.trychroma.com/docs/embeddings/embedding-functions
