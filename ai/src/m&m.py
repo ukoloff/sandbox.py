@@ -32,7 +32,10 @@ class DefEmb:
 
 
 db = Chroma.from_documents(
-    docs, DefEmb(), persist_directory=str(Path(__file__).parent / ".db")
+    docs,
+    DefEmb(),
+    persist_directory=str(Path(__file__).parent / ".db"),
+    collection_name="m-m.def",
 )
 
 question = "Какой плащ был у Понтия Пилата?"
