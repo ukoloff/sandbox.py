@@ -8,7 +8,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from chromadb.utils import embedding_functions
 
-src = Path(__file__).parents[1] / 'data' / 'мастер_и_маргарита.txt'
+src = Path(__file__).parents[1] / "data" / "мастер_и_маргарита.txt"
 doc = TextLoader(src).load()
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=1000,
@@ -22,6 +22,7 @@ print(f"documents: {len(docs)}")
 # https://docs.trychroma.com/docs/embeddings/embedding-functions
 ef = embedding_functions.DefaultEmbeddingFunction()
 
+
 class DefEmb:
     def embed_query(self, text: str) -> List[float]:
         return ef([text])[0]
@@ -29,7 +30,10 @@ class DefEmb:
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
         return ef(texts)
 
-db = Chroma.from_documents(docs, DefEmb())
+
+db = Chroma.from_documents(
+    docs, DefEmb(), persist_directory=str(Path(__file__).parent / ".db")
+)
 
 question = "Какой плащ был у Понтия Пилата?"
 docs = db.similarity_search(question)
