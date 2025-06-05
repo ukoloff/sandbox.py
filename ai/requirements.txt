@@ -3,5 +3,6 @@ langchain
 langchain_community
 langchain_huggingface
 sentence-transformers
+chromadb
 gigachat
 langchain-gigachat
