@@ -1,6 +1,6 @@
 python-dotenv
 langchain
-langchain_community
+langchain_huggingface
 sentence-transformers
 gigachat
 langchain-gigachat
