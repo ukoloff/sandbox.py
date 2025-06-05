@@ -7,3 +7,4 @@ langchain_chroma
 chromadb
 gigachat
 langchain-gigachat
+gigachain-cli

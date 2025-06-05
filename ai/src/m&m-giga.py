@@ -22,7 +22,7 @@ print(f"documents: {len(docs)}")
 
 load_dotenv()
 
-emb = GigaChatEmbeddings(verify_ssl_certs=False)
+emb = GigaChatEmbeddings()
 
 db = Chroma.from_documents(
     docs,

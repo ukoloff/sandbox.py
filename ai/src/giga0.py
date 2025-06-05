@@ -4,7 +4,7 @@ from gigachat import GigaChat
 
 load_dotenv()
 
-llm = GigaChat(verify_ssl_certs=False)
+llm = GigaChat()
 
 # Query
 q = llm.chat("Однажды в студёную зимнюю пору?")
