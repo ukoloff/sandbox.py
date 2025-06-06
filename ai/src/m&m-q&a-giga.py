@@ -6,6 +6,7 @@ from langchain_chroma import Chroma
 from dotenv import load_dotenv
 from gigachat import GigaChat
 from langchain_gigachat import GigaChatEmbeddings
+from langchain_core.runnables import RunnablePassthrough
 
 question = "Какой плащ был у Понтия Пилата?"
 
@@ -16,5 +17,17 @@ emb = GigaChatEmbeddings()
 
 db = Chroma("m-m.giga", emb, persist_directory=str(Path(__file__).parent / ".db"))
 
+
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
+
+
 retriever = db.as_retriever()
-print(retriever.invoke(question))
+
+chain = {
+    "context": retriever | format_docs,
+    "question": RunnablePassthrough(),
+} | RunnablePassthrough()
+
+res = chain.invoke(question)
+print(res)
