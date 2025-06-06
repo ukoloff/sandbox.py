@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from gigachat import GigaChat
 from langchain_gigachat import GigaChatEmbeddings
 from langchain_core.runnables import RunnablePassthrough
+from langchain import hub
 
 question = "Какой плащ был у Понтия Пилата?"
 
@@ -22,12 +23,14 @@ def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
 
+prompt = hub.pull("rlm/rag-prompt")
+
 retriever = db.as_retriever()
 
 chain = {
     "context": retriever | format_docs,
     "question": RunnablePassthrough(),
-} | RunnablePassthrough()
+} | prompt
 
 res = chain.invoke(question)
 print(res)
