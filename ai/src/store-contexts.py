@@ -26,4 +26,13 @@ contexts = dict(
 
 dst = Path(__file__).parents[1] / "data" / "contexts.yml"
 
-yaml.dump(contexts, dst.open("w", encoding="utf-8"), allow_unicode=True)
+
+def str_presenter(dumper, data):
+    if "\n" in data:  # check for multiline string
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+    return dumper.represent_scalar("tag:yaml.org,2002:str", data)
+
+
+# yaml.add_representer(str, str_presenter)
+
+yaml.dump(contexts, dst.open("w", encoding="utf-8"), allow_unicode=True, sort_keys=False)
