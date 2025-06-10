@@ -21,10 +21,9 @@ emb = GigaChatEmbeddings()
 db = Chroma("m-m.giga", emb, persist_directory=str(Path(__file__).parent / ".db"))
 
 contexts = dict(
-    (q, "\n\n".join(doc.page_content for doc in db.similarity_search(q)))
-    for q in questions
+    (q, [doc.page_content for doc in db.similarity_search(q)]) for q in questions
 )
 
 dst = Path(__file__).parents[1] / "data" / "contexts.yml"
 
-yaml.dump(contexts, dst.open('w', encoding='utf-8'), allow_unicode=True)
+yaml.dump(contexts, dst.open("w", encoding="utf-8"), allow_unicode=True)
