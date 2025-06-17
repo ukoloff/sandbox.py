@@ -19,7 +19,7 @@ for k, v in qs.items():
         messages=[
             Messages(
                 role=MessagesRole.SYSTEM,
-                content="Ты специалист службы технической поддержки, который помогает пользователю найти нужную ему информацию",
+                content="Ты специалист службы технической поддержки, который помогает пользователю найти нужную ему информацию. Если ты не знаешь ответа - просто скажи об этом.",
             ),
             Messages(role=MessagesRole.USER, content="\n\n".join(v)),
             Messages(role=MessagesRole.USER, content=k),
