@@ -1,7 +1,8 @@
 #
 # Free embeddings
 #
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain.embeddings.huggingface import HuggingFaceEmbeddings
+# from langchain_huggingface import HuggingFaceEmbeddings
 
 emb = HuggingFaceEmbeddings(model_name='all-MiniLM-L6-v2')
 
