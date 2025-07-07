@@ -10,3 +10,4 @@ gigachat
 langchain-gigachat
 gigachain-cli
 fastembed
+langchain_openai
