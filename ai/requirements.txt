@@ -9,3 +9,4 @@ chromadb
 gigachat
 langchain-gigachat
 gigachain-cli
+fastembed
