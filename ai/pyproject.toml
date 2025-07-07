@@ -1,0 +1,21 @@
+[project]
+name = "zzz"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "chromadb>=0.5.0",
+    "fastembed>=0.7.1",
+    "gigachain-cli>=0.0.10.1",
+    "gigachat>=0.1.40",
+    "langchain>=0.3.26",
+    "langchain-chroma>=0.2.3",
+    "langchain-community>=0.3.27",
+    "langchain-gigachat>=0.3.11",
+    "langchain-huggingface>=0.3.0",
+    "langchain-openai>=0.3.27",
+    "python-dotenv>=1.1.1",
+    "pyyaml>=6.0.2",
+    "sentence-transformers>=5.0.0",
+]
