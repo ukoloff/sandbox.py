@@ -26,6 +26,10 @@ def tel(ip):
 
         browser.find_element(By.ID, 'Account').click()
 
+        for name in 'AccountLabel AccountRegisterName AccountUserName'.split():
+            txt = browser.find_element(By.NAME, name).get_attribute('value')
+            print(txt)
+
 
 def main():
     tel("10.172.202.31")
