@@ -10,6 +10,7 @@ load_dotenv(join(dirname(__file__), ".env"))
 def tel(ip):
     chrome_options = Options()
     chrome_options.add_argument("--disable-auto-update")
+    chrome_options.add_argument('--ignore-certificate-errors')
     with webdriver.Chrome(options=chrome_options) as browser:
       browser.get(f"https://{ip}")
 
