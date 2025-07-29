@@ -24,6 +24,9 @@ def tel(ip):
         browser.find_element(By.ID, 'idPassword').send_keys(os.getenv('SIP_PASS'))
         browser.find_element(By.ID, 'idConfirm').click()
 
+        browser.find_element(By.ID, 'Account').click()
+
+
 def main():
     tel("10.172.202.31")
 
