@@ -24,7 +24,7 @@ def tel(ip):
     chrome_options.add_argument("--disable-auto-update")
     chrome_options.add_argument("--ignore-certificate-errors")
     with webdriver.Chrome(options=chrome_options) as browser:
-        browser.implicitly_wait(3)
+        browser.implicitly_wait(5)
         browser.get(f"https://{ip}")
 
         login = browser.find_elements(By.ID, "idUsername")
@@ -67,7 +67,7 @@ def walkIPs(network="10.172.200.0/22"):
             try:
                 res = IP(str(ip))
             except Exception as e:
-                res = e
+                res = str(e).splitlines()[0]
             print(f"{ip}<+{tdelta(now - start)}>:\t{res}", file=log, flush=True)
         stop = datetime.datetime.now()
         print(f"End<+{tdelta(stop - start)}>:", stop.isoformat(' '), file=log)
