@@ -4,7 +4,7 @@ import csv
 import ipaddress
 import datetime
 from os.path import join, dirname
-import ping3
+import socket
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -13,11 +13,16 @@ from selenium.webdriver.common.by import By
 
 load_dotenv(join(dirname(__file__), ".env"))
 
+
 def tdelta(delta):
     """
     Format timedelta
     """
-    return re.sub(r'^[0:]+', '', str(delta).split('.')[0])
+    res = re.sub(r"^[0:]+", "", str(delta).split(".")[0])
+    if not res:
+        res = '0'
+    return res
+
 
 def tel(ip):
     chrome_options = Options()
@@ -42,9 +47,16 @@ def tel(ip):
             res.append(txt)
         return res
 
+
+def testNC(ip):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.settimeout(0.5)
+        res = s.connect_ex((ip, 80))
+        return res == 0
+
+
 def IP(ip):
-    ping = ping3.ping(ip, timeout=0.33)
-    if ping is None or ping is False:
+    if not testNC(ip):
         return "Not found"
     return tel(ip)
 
@@ -60,7 +72,7 @@ def walkIPs(network="10.172.200.0/22"):
         logfile,
         "a",
     ) as log:
-        print("Start:", start.isoformat(' '), file=log)
+        print("Start:", start.isoformat(" "), file=log)
         for ip in ipaddress.ip_network(network).hosts():
             now = datetime.datetime.now()
             print(ip, end="\t", flush=True)
@@ -70,7 +82,7 @@ def walkIPs(network="10.172.200.0/22"):
                 res = str(e).splitlines()[0]
             print(f"{ip}<+{tdelta(now - start)}>:\t{res}", file=log, flush=True)
         stop = datetime.datetime.now()
-        print(f"End<+{tdelta(stop - start)}>:", stop.isoformat(' '), file=log)
+        print(f"End<+{tdelta(stop - start)}>:", stop.isoformat(" "), file=log)
 
 
 def main():
