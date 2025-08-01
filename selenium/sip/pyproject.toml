@@ -6,5 +6,6 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "dotenv>=0.9.9",
+    "ping3>=4.0.8",
     "selenium>=4.34.2",
 ]
