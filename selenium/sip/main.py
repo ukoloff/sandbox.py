@@ -33,15 +33,15 @@ def tel(ip):
 
 
 def main():
-    readCSV()
+    global exts
+    exts = readCSV()
     tel("10.172.202.31")
 
 def readCSV():
     src = join(dirname(__file__), "data", "omz2sinara.csv")
     with open(src) as f:
         reader = csv.DictReader(f, delimiter=';')
-        for row in reader:
-            print(row)
+        return dict((row['Внутр. Номер'], row) for row in reader)
 
 if __name__ == "__main__":
     main()
