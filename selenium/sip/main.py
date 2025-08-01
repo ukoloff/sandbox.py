@@ -29,22 +29,24 @@ def tel(ip):
 
         login = browser.find_elements(By.ID, "idUsername")
         if len(login) != 1:
-            print("Authorization form not found")
+            return "Authorization form not found"
         login[0].send_keys(os.getenv("SIP_USER"))
         browser.find_element(By.ID, "idPassword").send_keys(os.getenv("SIP_PASS"))
         browser.find_element(By.ID, "idConfirm").click()
 
         browser.find_element(By.ID, "Account").click()
 
+        res = []
         for name in "AccountLabel AccountRegisterName AccountUserName".split():
             txt = browser.find_element(By.NAME, name).get_attribute("value")
-            print(txt)
+            res.append(txt)
+        return res
 
 def IP(ip):
     ping = ping3.ping(ip, timeout=0.33)
     if ping is None or ping is False:
         return "Not found"
-    return "Ok"
+    return tel(ip)
 
 
 def walkIPs(network="10.172.200.0/22"):
