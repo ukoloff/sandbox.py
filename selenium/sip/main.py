@@ -24,7 +24,7 @@ def tdelta(delta):
     return res
 
 
-reportLabels = "AccountUserName AccountRegisterName AccountLabel AccountLabel".split()
+reportLabels = "AccountUserName AccountRegisterName AccountLabel AccountDisplayName".split()
 
 
 def tel(ip):
