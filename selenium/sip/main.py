@@ -39,7 +39,10 @@ def tel(ip):
         browser.find_element(By.ID, "idPassword").send_keys(os.getenv("SIP_PASS"))
         browser.find_element(By.ID, "idConfirm").click()
 
-        browser.find_element(By.ID, "Account").click()
+        tabs = browser.find_elements(By.ID, "Account")
+        if len(tabs) != 1:
+            return "Authorization failed"
+        tabs[0].click()
 
         res = []
         for name in "AccountLabel AccountRegisterName AccountUserName".split():
@@ -57,7 +60,7 @@ def testNC(ip):
 
 def IP(ip):
     if not testNC(ip):
-        return "Not found"
+        return "Not responding"
     return tel(ip)
 
 
