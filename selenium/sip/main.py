@@ -20,8 +20,11 @@ def tdelta(delta):
     """
     res = re.sub(r"^[0:]+", "", str(delta).split(".")[0])
     if not res:
-        res = '0'
+        res = "0"
     return res
+
+
+reportLabels = "AccountUserName AccountRegisterName AccountLabel AccountLabel".split()
 
 
 def tel(ip):
@@ -32,20 +35,25 @@ def tel(ip):
         browser.implicitly_wait(5)
         browser.get(f"https://{ip}")
 
-        login = browser.find_elements(By.ID, "idUsername")
-        if len(login) != 1:
+        btns = browser.find_elements(By.ID, "idConfirm")
+        if len(btns) != 1:
             return "Authorization form not found"
-        login[0].send_keys(os.getenv("SIP_USER"))
-        browser.find_element(By.ID, "idPassword").send_keys(os.getenv("SIP_PASS"))
-        browser.find_element(By.ID, "idConfirm").click()
 
-        tabs = browser.find_elements(By.ID, "Account")
+        browser.find_element(By.CSS_SELECTOR, "#idUsername, [name=username]").send_keys(
+            os.getenv("SIP_USER")
+        )
+        browser.find_element(By.CSS_SELECTOR, "#idPassword, [name=pwd]").send_keys(
+            os.getenv("SIP_PASS")
+        )
+        btns[0].click()
+
+        tabs = browser.find_elements(By.CSS_SELECTOR, "#Account, #account")
         if len(tabs) != 1:
             return "Authorization failed"
         tabs[0].click()
 
         res = []
-        for name in "AccountLabel AccountRegisterName AccountUserName".split():
+        for name in reportLabels:
             txt = browser.find_element(By.NAME, name).get_attribute("value")
             res.append(txt)
         return res
@@ -54,7 +62,7 @@ def tel(ip):
 def testNC(ip):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(0.5)
-        res = s.connect_ex((ip, 80))
+        res = s.connect_ex((ip, 443))
         return res == 0
 
 
@@ -71,10 +79,7 @@ def walkIPs(network="10.172.200.0/22"):
         "logs",
         f"{start.strftime('%Y-%m-%d-%H-%M-%S')}.log",
     )
-    with open(
-        logfile,
-        "a",
-    ) as log:
+    with open(logfile, "a", encoding="utf-8") as log:
         print("Start:", start.isoformat(" "), file=log)
         for ip in ipaddress.ip_network(network).hosts():
             now = datetime.datetime.now()
