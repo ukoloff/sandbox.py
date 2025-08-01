@@ -1,5 +1,6 @@
 import os
 import csv
+import ipaddress
 from os.path import join, dirname
 from dotenv import load_dotenv
 from selenium import webdriver
@@ -35,6 +36,8 @@ def tel(ip):
 def main():
     global exts
     exts = readCSV()
+    net = ipaddress.ip_network('10.172.200.0/22')
+    hosts = [*net.hosts()]
     tel("10.172.202.31")
 
 def readCSV():
