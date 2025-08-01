@@ -1,4 +1,5 @@
 import os
+import csv
 from os.path import join, dirname
 from dotenv import load_dotenv
 from selenium import webdriver
@@ -32,8 +33,15 @@ def tel(ip):
 
 
 def main():
+    readCSV()
     tel("10.172.202.31")
 
+def readCSV():
+    src = join(dirname(__file__), "data", "omz2sinara.csv")
+    with open(src) as f:
+        reader = csv.DictReader(f, delimiter=';')
+        for row in reader:
+            print(row)
 
 if __name__ == "__main__":
     main()
