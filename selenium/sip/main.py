@@ -77,7 +77,7 @@ def walkIPs(network="10.172.200.0/22"):
     logfile = join(
         dirname(__file__),
         "logs",
-        f"{start.strftime('%Y-%m-%d-%H-%M-%S')}.log",
+        f"{start.strftime('sip-%Y-%m-%d-%H-%M-%S')}.log",
     )
     with open(logfile, "a", encoding="utf-8") as log:
         print("Start:", start.isoformat(" "), file=log)
