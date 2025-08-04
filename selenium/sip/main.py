@@ -64,7 +64,7 @@ def telDef(browser):
 
     return telProcess(
         [browser.find_element(By.NAME, name) for name in reportLabels],
-        browser.find_element(By.ID, "btn_confirm1"),
+        browser.find_element(By.CSS_SELECTOR, "#btn_confirm1, [name=btnSubmit]"),
     )
 
 
