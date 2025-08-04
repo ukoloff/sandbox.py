@@ -24,11 +24,6 @@ def tdelta(delta):
     return res
 
 
-reportLabels = (
-    "AccountUserName AccountRegisterName AccountLabel AccountDisplayName".split()
-)
-
-
 def tel(ip):
     chrome_options = Options()
     chrome_options.add_argument("--disable-auto-update")
@@ -47,6 +42,11 @@ def tel(ip):
         return "Authorization form not found"
 
 
+reportLabels = (
+    "AccountUserName AccountRegisterName AccountLabel AccountDisplayName".split()
+)
+
+
 def telDef(browser):
     browser.find_element(By.CSS_SELECTOR, "#idUsername, [name=username]").send_keys(
         os.getenv("SIP_USER")
@@ -61,11 +61,8 @@ def telDef(browser):
         return "Authorization failed"
     tabs[0].click()
 
-    res = []
-    for name in reportLabels:
-        txt = browser.find_element(By.NAME, name).get_attribute("value")
-        res.append(txt)
-    return res
+    inputs = (browser.find_element(By.NAME, name) for name in reportLabels)
+    return [el.get_attribute("value") for el in inputs]
 
 
 def telAdv(browser):
@@ -78,13 +75,13 @@ def telAdv(browser):
         return "Authorization failed"
     tabs[0].click()
 
-    browser.find_element(By.ID, 'AccountRegister').click()
+    browser.find_element(By.ID, "AccountRegister").click()
 
-    res = []
-    for name in reportLabels:
-        txt = browser.find_element(By.CSS_SELECTOR, f"[name={name}] input").get_attribute("value")
-        res.append(txt)
-    return res
+    inputs = (
+        browser.find_element(By.CSS_SELECTOR, f"[name={name}] input")
+        for name in reportLabels
+    )
+    return [el.get_attribute("value") for el in inputs]
 
 
 def testNC(ip):
