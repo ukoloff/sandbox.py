@@ -62,8 +62,7 @@ def telDef(browser):
         return "Authorization failed"
     tabs[0].click()
 
-    inputs = [browser.find_element(By.NAME, name) for name in reportLabels]
-    return [el.get_attribute("value") for el in inputs]
+    return telProcess([browser.find_element(By.NAME, name) for name in reportLabels])
 
 
 def telAdv(browser):
@@ -80,10 +79,15 @@ def telAdv(browser):
 
     ActionChains(browser).pause(1).perform()
 
-    inputs = [
-        browser.find_element(By.CSS_SELECTOR, f"[name={name}] input")
-        for name in reportLabels
-    ]
+    return telProcess(
+        [
+            browser.find_element(By.CSS_SELECTOR, f"[name={name}] input")
+            for name in reportLabels
+        ]
+    )
+
+
+def telProcess(inputs):
     return [el.get_attribute("value") for el in inputs]
 
 
