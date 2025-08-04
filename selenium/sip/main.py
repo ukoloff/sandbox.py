@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 load_dotenv(join(dirname(__file__), ".env"))
@@ -61,7 +62,7 @@ def telDef(browser):
         return "Authorization failed"
     tabs[0].click()
 
-    inputs = (browser.find_element(By.NAME, name) for name in reportLabels)
+    inputs = [browser.find_element(By.NAME, name) for name in reportLabels]
     return [el.get_attribute("value") for el in inputs]
 
 
@@ -77,10 +78,12 @@ def telAdv(browser):
 
     browser.find_element(By.ID, "AccountRegister").click()
 
-    inputs = (
+    ActionChains(browser).pause(1).perform()
+
+    inputs = [
         browser.find_element(By.CSS_SELECTOR, f"[name={name}] input")
         for name in reportLabels
-    )
+    ]
     return [el.get_attribute("value") for el in inputs]
 
 
