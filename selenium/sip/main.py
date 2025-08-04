@@ -62,7 +62,10 @@ def telDef(browser):
         return "Authorization failed"
     tabs[0].click()
 
-    return telProcess([browser.find_element(By.NAME, name) for name in reportLabels])
+    return telProcess(
+        [browser.find_element(By.NAME, name) for name in reportLabels],
+        browser.find_element(By.ID, "btn_confirm1"),
+    )
 
 
 def telAdv(browser):
@@ -83,17 +86,29 @@ def telAdv(browser):
         [
             browser.find_element(By.CSS_SELECTOR, f"[name={name}] input")
             for name in reportLabels
-        ]
+        ],
+        browser.find_element(By.CSS_SELECTOR, "#y-submit-confirm button"),
     )
 
 
-def telProcess(inputs):
-    return [el.get_attribute("value") for el in inputs]
+def telProcess(inputs, button):
+    ext = inputs[0].get_attribute("value")
+    if ext not in exts:
+        return f"Skipped:\t{[el.get_attribute('value') for el in inputs]}"
+    extension = exts[ext]
+    num = extension["Внутр. Номер new"]
+    fio = extension["ФИО"]
+    data = [num, num, f"{num} {fio}", fio]
+    for i, v in zip(inputs, data):
+        i.clear()
+        i.send_keys(v)
+    # button.click()
+    return f"Patch:\t {ext} -> {data}"
 
 
 def testNC(ip):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.settimeout(0.5)
+        s.settimeout(0.3)
         res = s.connect_ex((ip, 443))
         return res == 0
 
