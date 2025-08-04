@@ -1,6 +1,7 @@
 #
 # Обновление списков FreePBX
 #
+import re
 import csv
 from os.path import join, dirname
 
@@ -26,8 +27,28 @@ def did(file='dids'):
           z['destination'] = ','.join([pfx, extensions[ext]['extension new'], tail])
           writer.writerow(z)
 
-
+def exts(file='extensions'):
+    with open(join(data, f"{file}.csv"), encoding='utf-8') as f:
+        exts = [*csv.DictReader(f)]
+    with open(join(data, f"{file}.sinara.csv"), 'w', newline='', encoding='utf-8') as f:
+      writer = csv.DictWriter(f, fieldnames=[*exts[0].keys()])
+      writer.writeheader()
+      for z in exts:
+          x = z['extension']
+          if x not in extensions:
+              continue
+          xdata = extensions[x]
+          x5 = xdata['extension new']
+          for k, v in z.items():
+              v5 = re.sub(r'\b' + re.escape(x) + r'\b', x5, v)
+              if v5 != v:
+                  z[k] = v5
+          writer.writerow(z)
 
 extensions = readCSV()
+
 print("Upgrading DIDs...")
 did()
+
+print("Upgrading extensions...")
+exts()
