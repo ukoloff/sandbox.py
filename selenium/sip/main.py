@@ -24,7 +24,9 @@ def tdelta(delta):
     return res
 
 
-reportLabels = "AccountUserName AccountRegisterName AccountLabel AccountDisplayName".split()
+reportLabels = (
+    "AccountUserName AccountRegisterName AccountLabel AccountDisplayName".split()
+)
 
 
 def tel(ip):
@@ -35,28 +37,54 @@ def tel(ip):
         browser.implicitly_wait(5)
         browser.get(f"https://{ip}")
 
-        btns = browser.find_elements(By.ID, "idConfirm")
-        if len(btns) != 1:
-            return "Authorization form not found"
+        btns = browser.find_elements(By.CSS_SELECTOR, "#idConfirm, #idLogin")
+        if len(btns):
+            match btns[0].get_attribute("id"):
+                case "idConfirm":
+                    return telDef(browser)
+                case "idLogin":
+                    return telAdv(browser)
+        return "Authorization form not found"
 
-        browser.find_element(By.CSS_SELECTOR, "#idUsername, [name=username]").send_keys(
-            os.getenv("SIP_USER")
-        )
-        browser.find_element(By.CSS_SELECTOR, "#idPassword, [name=pwd]").send_keys(
-            os.getenv("SIP_PASS")
-        )
-        btns[0].click()
 
-        tabs = browser.find_elements(By.CSS_SELECTOR, "#Account, #account")
-        if len(tabs) != 1:
-            return "Authorization failed"
-        tabs[0].click()
+def telDef(browser):
+    browser.find_element(By.CSS_SELECTOR, "#idUsername, [name=username]").send_keys(
+        os.getenv("SIP_USER")
+    )
+    browser.find_element(By.CSS_SELECTOR, "#idPassword, [name=pwd]").send_keys(
+        os.getenv("SIP_PASS")
+    )
+    browser.find_element(By.ID, "idConfirm").click()
 
-        res = []
-        for name in reportLabels:
-            txt = browser.find_element(By.NAME, name).get_attribute("value")
-            res.append(txt)
-        return res
+    tabs = browser.find_elements(By.CSS_SELECTOR, "#Account, #account")
+    if len(tabs) != 1:
+        return "Authorization failed"
+    tabs[0].click()
+
+    res = []
+    for name in reportLabels:
+        txt = browser.find_element(By.NAME, name).get_attribute("value")
+        res.append(txt)
+    return res
+
+
+def telAdv(browser):
+    browser.find_element(By.ID, "idUsername").send_keys(os.getenv("SIP_USER"))
+    browser.find_element(By.ID, "idPassword").send_keys(os.getenv("SIP_PASS"))
+    browser.find_element(By.ID, "idLogin").click()
+
+    tabs = browser.find_elements(By.ID, "Account")
+    if len(tabs) != 1:
+        return "Authorization failed"
+    tabs[0].click()
+
+    browser.find_element(By.ID, 'AccountRegister').click()
+
+    res = []
+    for name in reportLabels:
+        txt = browser.find_element(By.CSS_SELECTOR, f"[name={name}] input").get_attribute("value")
+        res.append(txt)
+    return res
 
 
 def testNC(ip):
