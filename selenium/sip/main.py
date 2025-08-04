@@ -96,8 +96,8 @@ def telProcess(inputs, button):
     if ext not in exts:
         return f"Skipped:\t{[el.get_attribute('value') for el in inputs]}"
     extension = exts[ext]
-    num = extension["Внутр. Номер new"]
-    fio = extension["ФИО"]
+    num = extension["extension new"]
+    fio = extension["name"]
     data = [num, num, f"{num} {fio}", fio]
     for i, v in zip(inputs, data):
         i.clear()
@@ -151,7 +151,7 @@ def readCSV():
     src = join(dirname(__file__), "data", "omz2sinara.csv")
     with open(src) as f:
         reader = csv.DictReader(f, delimiter=";")
-        return dict((row["Внутр. Номер"], row) for row in reader)
+        return dict((row["extension"], row) for row in reader)
 
 
 if __name__ == "__main__":
