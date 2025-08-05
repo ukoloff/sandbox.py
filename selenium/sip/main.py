@@ -107,7 +107,7 @@ def telProcess(inputs, button):
     for i, v in zip(inputs, data):
         i.clear()
         i.send_keys(v)
-    if 0:
+    if 1:
         button.click()
         ActionChains(button.parent).pause(1).perform()
     return f"Patch:\t {ext} -> {data}\t@{title}"
