@@ -30,7 +30,7 @@ def tdelta(delta):
 
 def tel(ip):
     chrome_options = Options()
-    # chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--ignore-certificate-errors")
     with webdriver.Chrome(options=chrome_options) as browser:
         browser.implicitly_wait(5)
