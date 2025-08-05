@@ -15,9 +15,11 @@ ForEach-Object {
   if (!$tel) { return }
   $next = $idx[$tel]
   if (!$next) { return }
+  $tel4 = $next.'extension new'
+  $_ | Set-ADUser -Replace @{otherTelephone = $tel4 }
   [PSCustomObject]@{
     name = $_.name
     old  = $tel
-    new  = $next.'extension new'
+    new  = $tel4
   }
 }
