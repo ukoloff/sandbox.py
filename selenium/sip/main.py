@@ -5,6 +5,8 @@ import ipaddress
 import datetime
 from os.path import join, dirname
 import socket
+from multiprocessing import Process, Queue
+import queue
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -134,7 +136,9 @@ def wrapIP(ip):
     return f"{ip}<+{tdelta(now - start)}>:\t{res}"
 
 
-def walkIPs(network="10.172.200.0/22"):
+def main(network="10.172.200.0/22"):
+    qi = Queue()
+    qo = Queue()
     logfile = join(
         dirname(__file__),
         "logs",
@@ -143,15 +147,20 @@ def walkIPs(network="10.172.200.0/22"):
     with open(logfile, "a", encoding="utf-8") as log:
         print("Start:", start.isoformat(" "), file=log)
         for ip in ipaddress.ip_network(network).hosts():
-            print(wrapIP(str(ip)), file=log, flush=True)
+            qi.put_nowait(str(ip))
+
+        ps = [Process(target=child, args=(qi, qo)) for i in range(5)]
+        for p in ps:
+            p.start()
+        N = len(ps)
+        while N:
+            res = qo.get()
+            if res is None:
+                N -= 1
+                continue
+            print(res, file=log, flush=True)
         stop = datetime.datetime.now()
         print(f"End<+{tdelta(stop - start)}>:", stop.isoformat(" "), file=log)
-
-
-def main():
-    global exts
-    exts = readCSV()
-    walkIPs()
 
 
 def readCSV():
@@ -159,6 +168,18 @@ def readCSV():
     with open(src) as f:
         reader = csv.DictReader(f, delimiter=";")
         return dict((row["extension"], row) for row in reader)
+
+
+def child(qi: Queue, qo: Queue):
+    global exts
+    exts = readCSV()
+    while True:
+        try:
+            ip = qi.get_nowait()
+            qo.put_nowait(wrapIP(ip))
+        except queue.Empty:
+            qo.put_nowait(None)
+            break
 
 
 if __name__ == "__main__":
