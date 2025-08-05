@@ -27,7 +27,7 @@ def tdelta(delta):
 
 def tel(ip):
     chrome_options = Options()
-    chrome_options.add_argument("--headless=new")
+    # chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--ignore-certificate-errors")
     with webdriver.Chrome(options=chrome_options) as browser:
         browser.implicitly_wait(5)
@@ -102,7 +102,9 @@ def telProcess(inputs, button):
     for i, v in zip(inputs, data):
         i.clear()
         i.send_keys(v)
-    # button.click()
+    if 0:
+      button.click()
+      ActionChains(button.parent).pause(1).perform()
     return f"Patch:\t {ext} -> {data}"
 
 
