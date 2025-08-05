@@ -13,6 +13,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 
 load_dotenv(join(dirname(__file__), ".env"))
+start = datetime.datetime.now()
 
 
 def tdelta(delta):
@@ -103,8 +104,8 @@ def telProcess(inputs, button):
         i.clear()
         i.send_keys(v)
     if 0:
-      button.click()
-      ActionChains(button.parent).pause(1).perform()
+        button.click()
+        ActionChains(button.parent).pause(1).perform()
     return f"Patch:\t {ext} -> {data}"
 
 
@@ -121,8 +122,17 @@ def IP(ip):
     return tel(ip)
 
 
+def wrapIP(ip):
+    print(ip, end="\t", flush=True)
+    now = datetime.datetime.now()
+    try:
+        res = IP(str(ip))
+    except Exception as e:
+        res = str(e).splitlines()[0]
+    return f"{ip}<+{tdelta(now - start)}>:\t{res}"
+
+
 def walkIPs(network="10.172.200.0/22"):
-    start = datetime.datetime.now()
     logfile = join(
         dirname(__file__),
         "logs",
@@ -131,13 +141,7 @@ def walkIPs(network="10.172.200.0/22"):
     with open(logfile, "a", encoding="utf-8") as log:
         print("Start:", start.isoformat(" "), file=log)
         for ip in ipaddress.ip_network(network).hosts():
-            now = datetime.datetime.now()
-            print(ip, end="\t", flush=True)
-            try:
-                res = IP(str(ip))
-            except Exception as e:
-                res = str(e).splitlines()[0]
-            print(f"{ip}<+{tdelta(now - start)}>:\t{res}", file=log, flush=True)
+            print(wrapIP(str(ip)), file=log, flush=True)
         stop = datetime.datetime.now()
         print(f"End<+{tdelta(stop - start)}>:", stop.isoformat(" "), file=log)
 
@@ -146,7 +150,6 @@ def main():
     global exts
     exts = readCSV()
     walkIPs()
-    # tel("10.172.202.31")
 
 
 def readCSV():
