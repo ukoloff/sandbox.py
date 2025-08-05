@@ -93,9 +93,11 @@ def telAdv(browser):
 
 
 def telProcess(inputs, button):
+    title = button.parent.title
+
     ext = inputs[0].get_attribute("value")
     if ext not in exts:
-        return f"Skipped:\t{[el.get_attribute('value') for el in inputs]}"
+        return f"Skipped:\t{[el.get_attribute('value') for el in inputs]}\t@{title}"
     extension = exts[ext]
     num = extension["extension new"]
     fio = extension["name"]
@@ -106,7 +108,7 @@ def telProcess(inputs, button):
     if 0:
         button.click()
         ActionChains(button.parent).pause(1).perform()
-    return f"Patch:\t {ext} -> {data}"
+    return f"Patch:\t {ext} -> {data}\t@{title}"
 
 
 def testNC(ip):
