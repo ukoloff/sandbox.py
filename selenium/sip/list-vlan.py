@@ -70,8 +70,16 @@ def telDef(browser):
     browser.find_elements(By.CSS_SELECTOR, "#Network, #network")[0].click()
     browser.find_elements(By.CSS_SELECTOR, "#network-adv, #network-advanced")[0].click()
 
+    result["vlan"] = (
+        browser.find_element(By.NAME, "VlanWanSwitch").get_attribute("selectedIndex")
+        != "0"
+    )
     result["vlanID"] = browser.find_element(By.NAME, "VlanWanVid").get_attribute(
         "value"
+    )
+    result["dhcp"] = (
+        browser.find_element(By.NAME, "VlanDhcpSwitch").get_attribute("selectedIndex")
+        != "0"
     )
     result["dhcpOption"] = browser.find_element(
         By.NAME, "VlanDhcpOption"
@@ -104,9 +112,21 @@ def telAdv(browser):
     browser.find_element(By.ID, "Network").click()
     browser.find_element(By.ID, "NetworkAdvanced").click()
 
+    result["vlan"] = (
+        browser.find_element(
+            By.CSS_SELECTOR, "[name=VlanWanSwitch] input"
+        ).get_attribute("value")
+        != "0"
+    )
     result["vlanID"] = browser.find_element(
         By.CSS_SELECTOR, "[name=VlanWanVid] input"
     ).get_attribute("value")
+    result["dhcp"] = (
+        browser.find_element(
+            By.CSS_SELECTOR, "[name=VlanDhcpSwitch] input"
+        ).get_attribute("value")
+        != "0"
+    )
     result["dhcpOption"] = browser.find_element(
         By.CSS_SELECTOR, "[name=VlanDhcpOption] input"
     ).get_attribute("value")
