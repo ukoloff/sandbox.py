@@ -1,6 +1,5 @@
 import os
 import re
-import csv
 import ipaddress
 import datetime
 from os.path import join, dirname
@@ -65,10 +64,12 @@ def telDef(browser):
         return "Authorization failed"
     tabs[0].click()
 
-    return telProcess(
-        [browser.find_element(By.NAME, name) for name in reportLabels],
-        browser.find_element(By.CSS_SELECTOR, "#btn_confirm1, [name=btnSubmit]"),
-    )
+    return {
+        "std": [
+            browser.find_element(By.NAME, name).get_attribute("value")
+            for name in reportLabels
+        ]
+    }
 
 
 def telAdv(browser):
@@ -85,32 +86,14 @@ def telAdv(browser):
 
     ActionChains(browser).pause(1).perform()
 
-    return telProcess(
-        [
-            browser.find_element(By.CSS_SELECTOR, f"[name={name}] input")
+    return {
+        "adv": [
+            browser.find_element(By.CSS_SELECTOR, f"[name={name}] input").get_attribute(
+                "value"
+            )
             for name in reportLabels
-        ],
-        browser.find_element(By.CSS_SELECTOR, "#y-submit-confirm button"),
-    )
-
-
-def telProcess(inputs, button):
-    title = button.parent.title
-
-    ext = inputs[0].get_attribute("value")
-    if ext not in exts:
-        return f"Skipped:\t{[el.get_attribute('value') for el in inputs]}\t@{title}"
-    extension = exts[ext]
-    num = extension["extension new"]
-    fio = extension["name"]
-    data = [num, num, f"{num} {fio}", fio]
-    for i, v in zip(inputs, data):
-        i.clear()
-        i.send_keys(v)
-    if 1:
-        button.click()
-        ActionChains(button.parent).pause(1).perform()
-    return f"Patch:\t {ext} -> {data}\t@{title}"
+        ]
+    }
 
 
 def testNC(ip):
@@ -142,7 +125,7 @@ def main(network="10.172.200.0/22"):
     logfile = join(
         dirname(__file__),
         "logs",
-        f"{start.strftime('sip-%Y-%m-%d-%H-%M-%S')}.log",
+        f"{start.strftime('vlan-%Y-%m-%d-%H-%M-%S')}.log",
     )
     with open(logfile, "a", encoding="utf-8") as log:
         print("Start:", start.isoformat(" "), file=log)
@@ -163,16 +146,7 @@ def main(network="10.172.200.0/22"):
         print(f"End<+{tdelta(stop - start)}>:", stop.isoformat(" "), file=log)
 
 
-def readCSV():
-    src = join(dirname(__file__), "data", "omz2sinara.csv")
-    with open(src) as f:
-        reader = csv.DictReader(f, delimiter=";")
-        return dict((row["extension"], row) for row in reader)
-
-
 def child(qi: Queue, qo: Queue):
-    global exts
-    exts = readCSV()
     while True:
         try:
             ip = qi.get_nowait()
