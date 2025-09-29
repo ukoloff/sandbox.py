@@ -45,9 +45,7 @@ def tel(ip):
         return "Authorization form not found"
 
 
-reportLabels = (
-    "AccountUserName AccountRegisterName AccountLabel AccountDisplayName".split()
-)
+aLabels = "AccountUserName AccountRegisterName AccountLabel AccountDisplayName".split()
 
 
 def telDef(browser):
@@ -64,12 +62,18 @@ def telDef(browser):
         return "Authorization failed"
     tabs[0].click()
 
-    return {
-        "std": [
-            browser.find_element(By.NAME, name).get_attribute("value")
-            for name in reportLabels
-        ]
+    result = {
+        "m": "std",
+        "label": browser.find_element(By.NAME, "AccountLabel").get_attribute("value"),
     }
+
+    browser.find_elements(By.CSS_SELECTOR, "#Network, #network")[0].click()
+    browser.find_element(By.ID, "network-adv").click()
+
+    result['vlanID']=browser.find_element(By.NAME, 'VlanWanVid').get_attribute("value")
+    result['dhcpOption']=browser.find_element(By.NAME, 'VlanDhcpOption').get_attribute("value")
+
+    return result
 
 
 def telAdv(browser):
@@ -86,14 +90,20 @@ def telAdv(browser):
 
     ActionChains(browser).pause(1).perform()
 
-    return {
-        "adv": [
-            browser.find_element(By.CSS_SELECTOR, f"[name={name}] input").get_attribute(
-                "value"
-            )
-            for name in reportLabels
-        ]
+    result = {
+        "m": "adv",
+        "label": browser.find_element(
+            By.CSS_SELECTOR, "[name=AccountLabel] input"
+        ).get_attribute("value"),
     }
+
+    browser.find_element(By.ID, "Network").click()
+    browser.find_element(By.ID, "NetworkAdvanced").click()
+
+    result['vlanID']=browser.find_element(By.CSS_SELECTOR, '[name=VlanWanVid] input').get_attribute("value")
+    result['dhcpOption']=browser.find_element(By.CSS_SELECTOR, '[name=VlanDhcpOption] input').get_attribute("value")
+
+    return result
 
 
 def testNC(ip):
