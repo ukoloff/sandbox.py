@@ -70,20 +70,13 @@ def telDef(browser):
     browser.find_elements(By.CSS_SELECTOR, "#Network, #network")[0].click()
     browser.find_elements(By.CSS_SELECTOR, "#network-adv, #network-advanced")[0].click()
 
-    result["vlan"] = (
-        browser.find_element(By.NAME, "VlanWanSwitch").get_attribute("selectedIndex")
+    result["lldp"] = (
+        browser.find_element(By.NAME, "LLDPSwitch").get_attribute("selectedIndex")
         != "0"
     )
-    result["vlanID"] = browser.find_element(By.NAME, "VlanWanVid").get_attribute(
-        "value"
+    result["cdp"] = (
+        browser.find_element(By.NAME, "CDPEnable").get_attribute("selectedIndex") != "0"
     )
-    result["dhcp"] = (
-        browser.find_element(By.NAME, "VlanDhcpSwitch").get_attribute("selectedIndex")
-        != "0"
-    )
-    result["dhcpOption"] = browser.find_element(
-        By.NAME, "VlanDhcpOption"
-    ).get_attribute("value")
 
     return result
 
@@ -112,24 +105,18 @@ def telAdv(browser):
     browser.find_element(By.ID, "Network").click()
     browser.find_element(By.ID, "NetworkAdvanced").click()
 
-    result["vlan"] = (
-        browser.find_element(
-            By.CSS_SELECTOR, "[name=VlanWanSwitch] input"
-        ).get_attribute("value")
+    result["lldp"] = (
+        browser.find_element(By.CSS_SELECTOR, "[name=LLDPSwitch] input").get_attribute(
+            "value"
+        )
         != "0"
     )
-    result["vlanID"] = browser.find_element(
-        By.CSS_SELECTOR, "[name=VlanWanVid] input"
-    ).get_attribute("value")
-    result["dhcp"] = (
-        browser.find_element(
-            By.CSS_SELECTOR, "[name=VlanDhcpSwitch] input"
-        ).get_attribute("value")
+    result["cdp"] = (
+        browser.find_element(By.CSS_SELECTOR, "[name=CDPEnable] input").get_attribute(
+            "value"
+        )
         != "0"
     )
-    result["dhcpOption"] = browser.find_element(
-        By.CSS_SELECTOR, "[name=VlanDhcpOption] input"
-    ).get_attribute("value")
 
     return result
 
@@ -163,7 +150,7 @@ def main(network="10.172.200.0/22"):
     logfile = join(
         dirname(__file__),
         "logs",
-        f"{start.strftime('vlan-%Y-%m-%d-%H-%M-%S')}.log",
+        f"{start.strftime('lldp-%Y-%m-%d-%H-%M-%S')}.log",
     )
     with open(logfile, "a", encoding="utf-8") as log:
         print("Start:", start.isoformat(" "), file=log)
