@@ -14,7 +14,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
-
+from selenium.webdriver.support.ui import Select
 
 load_dotenv(join(dirname(__file__), ".env"))
 start = datetime.datetime.now()
@@ -89,6 +89,17 @@ def telDef(browser):
         By.NAME, "VlanDhcpOption"
     ).get_attribute("value")
 
+    if not result["vlan"] and result["dhcp"] and result["dhcpOption"] == "132":
+        return result
+
+    Select(browser.find_element(By.NAME, "VlanWanSwitch")).select_by_index(0)
+    Select(browser.find_element(By.NAME, "VlanDhcpSwitch")).select_by_index(1)
+    Select(browser.find_element(By.NAME, "LLDPSwitch")).select_by_index(0)
+    Select(browser.find_element(By.NAME, "CDPEnable")).select_by_index(0)
+    z = browser.find_element(By.NAME, "VlanDhcpOption")
+    z.clear()
+    z.send_keys("132")
+
     return result
 
 
@@ -135,6 +146,9 @@ def telAdv(browser):
     result["dhcpOption"] = browser.find_element(
         By.CSS_SELECTOR, "[name=VlanDhcpOption] input"
     ).get_attribute("value")
+
+    if not result["vlan"] and result["dhcp"] and result["dhcpOption"] == "132":
+        return result
 
     return result
 
@@ -201,6 +215,6 @@ def child(qi: Queue, qo: Queue):
 
 
 if __name__ == "__main__":
-    main("10.172.200.243/32")
-    # main("10.172.202.133/32")
+    # main("10.172.201.167/32")
+    main("10.172.202.133/32")
     # main("10.172.200.0/22")
