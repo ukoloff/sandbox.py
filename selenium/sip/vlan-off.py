@@ -67,6 +67,7 @@ def telDef(browser):
 
     result = {
         "m": "std",
+        "title": browser.title,
         "label": browser.find_element(By.NAME, "AccountLabel").get_attribute("value"),
     }
 
@@ -107,6 +108,7 @@ def telAdv(browser):
 
     result = {
         "m": "adv",
+        "title": browser.title,
         "label": browser.find_element(
             By.CSS_SELECTOR, "[name=AccountLabel] input"
         ).get_attribute("value"),
