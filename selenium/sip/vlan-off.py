@@ -166,6 +166,7 @@ def main(network="10.172.200.0/22"):
     logfile = join(
         dirname(__file__),
         "logs",
+        "vlan",
         f"{start.strftime('vlan-%Y-%m-%d-%H-%M-%S')}.log",
     )
     with open(logfile, "a", encoding="utf-8") as log:
