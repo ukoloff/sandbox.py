@@ -102,7 +102,15 @@ def telDef(browser):
 
     btn = browser.find_element(By.CSS_SELECTOR, "#btn_confirm1, [name=btnSubmit]")
     btn.click()
-    ActionChains(browser).pause(3).perform()
+    try:
+      ActionChains(browser).pause(3).perform()
+    except Exception as e:
+      # Alert detected?
+      result["!"] = True
+      # al = browser.switch_to.alert()
+      # al.accept()
+      # ActionChains(browser).pause(1).perform()
+      return result
 
     btns = browser.find_elements(By.ID, "btn-apply-cache-config")
     result["ok"] = len(btns) == 1
@@ -225,6 +233,6 @@ def child(qi: Queue, qo: Queue):
 
 
 if __name__ == "__main__":
-    # main("10.172.201.156/32")
+    main("10.172.201.42/32")
     # main("10.172.202.133/32")
-    main("10.172.200.0/22")
+    # main("10.172.200.0/22")
